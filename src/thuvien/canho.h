@@ -1,0 +1,46 @@
+// Header Căn hộ
+
+#include "thuvienchung.h"
+#include "cudan.h"
+
+struct CanHo {
+    string tencanho;
+    int tang;
+    string trangthai;           // trạng thái phòng trống hay ko 
+    CuDanPtr danhsachcudan;     // thành viên trong phòng đó 
+    CanHo* link;
+};
+
+typedef CanHo* CanHoPtr;
+
+// khởi tạo danhsachcanho = NULL lúc đầu 
+void KhoiTaoListCanHo(CanHoPtr& danhsach);
+CanHoPtr KhoiTaoCanHo(CanHo& canhomoi);
+CanHo NhapCanHo();
+void ThemCuoiDanhSachCanHo(CanHoPtr& danhsach, CanHoPtr canho);
+CanHoPtr TimTheoTenCanHo(CanHoPtr danhsach, string tencanho);
+bool XoaCanHo(CanHoPtr& danhsach, string tencanho);
+bool SuaCanHo(CanHoPtr danhsach, string tencanho);
+
+// Thêm cư dân và chuyển cư dân 
+void ThemCuDanVaoCanHo(CanHoPtr canho, int soluong);
+
+// Chuyển cư dân sang căn hộ khác 
+bool ChuyenCuDan(CanHoPtr danhsach, string tencanhocu, string tencanhomoi, string cccd);
+
+// Tìm kiếm 
+CanHoPtr TimTheoTenChuHo(CanHoPtr danhsach, string tenchuho);
+CanHoPtr TimTheoCCCDChuHo(CanHoPtr danhsach, string cccd);
+
+// Lọc 
+void LocTheoTang(CanHoPtr danhsach, int tang);
+void LocTheoTrangThai(CanHoPtr danhsach, string trangthai);
+
+// Sắp xếp theo tên căn hộ  
+void SapXepTenCanHoXuoi(CanHoPtr danhsach);
+void SapXepTenCanHoNguoc(CanHoPtr danhsach);
+
+// In ra màn hình 
+void XuatMotCanHo(CanHoPtr canho, bool kemchuho);
+void XuatDanhSachCanHo(CanHoPtr canho, bool kemchuho);
+
