@@ -1,4 +1,4 @@
-// Thư viện dùng chung cho mọi file 
+// Thư viện dùng chung cho mọi file header
 
 #include <iostream>
 #include <string>

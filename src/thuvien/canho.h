@@ -14,7 +14,7 @@ struct CanHo {
 typedef CanHo* CanHoPtr;
 
 // khởi tạo danhsachcanho = NULL lúc đầu 
-void KhoiTaoListCanHo(CanHoPtr& danhsach);
+void KhoiTaoDanhSachCanHo(CanHoPtr& danhsach);
 CanHoPtr KhoiTaoCanHo(CanHo& canhomoi);
 CanHo NhapCanHo();
 void ThemCuoiDanhSachCanHo(CanHoPtr& danhsach, CanHoPtr canho);
@@ -44,3 +44,4 @@ void SapXepTenCanHoNguoc(CanHoPtr danhsach);
 void XuatMotCanHo(CanHoPtr canho, bool kemchuho);
 void XuatDanhSachCanHo(CanHoPtr canho, bool kemchuho);
 
+void GiaiPhongDanhSachCanHo(CanHo& danhsach);

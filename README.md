@@ -7,6 +7,8 @@ CHƯƠNG TRÌNH QUẢN LÝ CHUNG CƯ CONSOLE (CLI) C++ BẰNG CẤU TRÚC DỮ L
 - Hạn nộp      : CUỐI HỌC KỲ 1 
 - Đề tài       : QUẢN LÝ CHUNG CƯ 
 
+---
+
 - Menu 10 tính năng cơ bản của chương trình
 
 1. Quan ly can ho (them / xoa / sua)
@@ -54,3 +56,51 @@ CHƯƠNG TRÌNH QUẢN LÝ CHUNG CƯ CONSOLE (CLI) C++ BẰNG CẤU TRÚC DỮ L
     - 11.2 Doc du lieu
 
 00. Thoat chuong trinh
+
+---
+
+Cấu trúc thư mục dự án
+
+```txt
+├── src
+│   ├── thuvien
+│   │   ├── canho.h
+│   │   ├── cudan.h
+│   │   ├── hoadon.h
+│   │   ├── saoluuvanapdulieu.h
+│   │   ├── thongke.h
+│   │   └── thuvienchung.h
+│   ├── canho.cpp
+│   ├── cudan.cpp
+│   ├── hoadon.cpp
+│   ├── main.cpp
+│   ├── saoluuvanapdulieu.cpp
+│   └── thongke.cpp
+├── .gitignore
+├── NOTICE.md
+├── README.md
+└── run.cpp
+``` 
+
+---
+
+Mô phỏng quy trình vận hành của danh sách liên kết đơn 
+
+```txt
+head
+  |
+  v
++-----------------------+      +-----------------------+      +-----------------------+      +-----------------------+
+|                       |      |                       |      |                       |      |                       |
+|                       |      |                       |      |                       |      |                       |
+| [ |*]-->[ |*]--> NULL |----->| [ |*]-->[ |*]--> NULL |----->| [ |*]-->[ |*]--> NULL |----->| [ |*]-->[ |*]--> NULL |-----> NULL
+|                       |      |                       |      |                       |      |                       |
+|                       |      |                       |      |                       |      |                       |
++-----------------------+      +-----------------------+      +-----------------------+      +-----------------------+
+         Node 1                         Node 2                         Node 3                         Node 4
+```
+
+- Với danh sách cư dân chỉ tính trong 1 phòng (căn)
+- Với danh sách căn hộ sẽ chứa trong đó 1 danh sách cư dân 
+- Không có danh sách liên kết tất cả thành viên trong chung cư với nhau
+=> Nghĩa là danh sách căn hộ là danh sách chính liên kết nhiều căn hộ với nhau, trong mỗi căn hộ sẽ có danh sách dân cư (là gia đình/thành viên) của căn hộ đó 

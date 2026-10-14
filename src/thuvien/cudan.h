@@ -13,7 +13,7 @@ struct CuDan {
 typedef CuDan* CuDanPtr;
 
 // khởi tạo danhsach = NULL lúc đầu 
-void KhoiTaoListCuDan(CuDanPtr& danhsach);
+void KhoiTaoDanhSachCuDan(CuDanPtr& danhsach);
 // Khởi tạo 1 node cư dân để nối vào dslk
 CuDanPtr KhoiTaoCuDan(CuDan& cudanmoi);
 // Hàm nhập thông tin 1 cư dân 
@@ -27,3 +27,4 @@ CuDanPtr TimTheoChuHo(CuDanPtr& danhsach);
 // tách dùng cho chuyển phòng cho cư dân mà ko xóa cư dân 
 CuDanPtr TachCuDan(CuDanPtr& danhsach);
 bool XoaCuDan(CuDanPtr& danhsach);
+void GiaiPhongDanhSachCuDan(CuDanPtr& danhsach);
