@@ -1,5 +1,22 @@
 #include "lib/saoluuvanapdulieu.h"
 
+bool KhoiTaoDuLieuVaoFile(CanHoPtr& danhsachcanho){
+    if(!exists("data")){
+        KhoiTaoDuLieuMau(danhsachcanho);
+        // Gia lap cac can dang thue da o 1 nam va tao hoa don 12 thang gan nhat.
+        KhoiTaoDanhSachHoaDonChoPhongDangThue(danhsachcanho);
+    } else if(!NapDuLieu(danhsachcanho)){
+        cout << "(!) Thu muc data ton tai nhung khong doc duoc du lieu" << endl;
+        return false;
+    }
+    if(!LuuDuLieu(danhsachcanho)){
+        cout << "(!) Khong the luu du lieu trong thu muc data" << endl;
+        GiaiPhongDanhSachCanHo(danhsachcanho);
+        return false;
+    }
+    return true;
+}
+
 bool LuuDuLieu(CanHoPtr& danhsachcanho){
     set<string> danhsachtencanho;
     CanHoPtr p = danhsachcanho;

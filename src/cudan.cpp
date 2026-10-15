@@ -33,21 +33,57 @@ CuDanPtr KhoiTaoCuDan(CuDan &cudanmoi){
 
 CuDan NhapCuDan(){
     CuDan cudanmoi;
-    cudanmoi.hoten = NhapChuoi("(?) Nhap ho ten: ");
-    cudanmoi.cccd = NhapChuoi("(?) Nhap CCCD: ");
-    while(!Lachuoichicoso(cudanmoi.cccd)){
-        cout << "(!) CCCD chi duoc chua chu so" << endl;
+    cudanmoi.hoten = NhapChuoi("\t\t(?) Nhap ho ten: ");
+    if(cudanmoi.hoten.empty()){
+        return cudanmoi;
+    }
+    cudanmoi.cccd = NhapChuoi("\t\t(?) Nhap CCCD: ");
+    if(cudanmoi.cccd.empty()){
+        return cudanmoi;
+    }
+    int solansai = 0;
+    while(!Lachuoichicoso(cudanmoi.cccd) && solansai < 2){
+        cout << "\t\t(!) CCCD chi duoc chua chu so" << endl;
         cudanmoi.cccd = NhapChuoi("(?) Nhap lai CCCD: ");
+        if(cudanmoi.cccd.empty()){
+            return cudanmoi;
+        }
+        solansai++;
     }
-    cudanmoi.sodienthoai = NhapChuoi("(?) Nhap so dien thoai: ");
-    while(!Lachuoichicoso(cudanmoi.sodienthoai)){
-        cout << "(!) So dien thoai chi duoc chua chu so" << endl;
+    if(!Lachuoichicoso(cudanmoi.cccd)){
+        cout << "\t(!) Da nhap sai 3 lan, quay lai menu" << endl;
+        cudanmoi.hoten = "";
+        return cudanmoi;
+    }
+    cudanmoi.sodienthoai = NhapChuoi("\t\t(?) Nhap so dien thoai: ");
+    if(cudanmoi.sodienthoai.empty()){
+        return cudanmoi;
+    }
+    solansai = 0;
+    while(!Lachuoichicoso(cudanmoi.sodienthoai) && solansai < 2){
+        cout << "\t\t(!) So dien thoai chi duoc chua chu so" << endl;
         cudanmoi.sodienthoai = NhapChuoi("(?) Nhap lai so dien thoai: ");
+        if(cudanmoi.sodienthoai.empty()){
+            return cudanmoi;
+        }
+        solansai++;
     }
-    int lachuho = NhapSo("(?) La chu ho? (1 = Co, 0 = Khong): ");
-    while(lachuho != 0 && lachuho != 1){
-        cout << "(!) Chi chon 1 hoac 0" << endl;
-        lachuho = NhapSo("(?) La chu ho? (1 = Co, 0 = Khong): ");
+    if(!Lachuoichicoso(cudanmoi.sodienthoai)){
+        cout << "\t(!) Da nhap sai 3 lan, quay lai menu" << endl;
+        cudanmoi.hoten = "";
+        return cudanmoi;
+    }
+    int lachuho = NhapSo("\t\t(?) La chu ho? (1 = Co, 0 = Khong): ");
+    solansai = 0;
+    while(lachuho != 0 && lachuho != 1 && lachuho != -1 && solansai < 2){
+        cout << "\t\t(!) Chi chon 1 hoac 0" << endl;
+        lachuho = NhapSo("\t\t(?) La chu ho? (1 = Co, 0 = Khong): ");
+        solansai++;
+    }
+    if(lachuho == -1 || (lachuho != 0 && lachuho != 1)){
+        cout << "\t(!) Da nhap sai 3 lan, quay lai menu" << endl;
+        cudanmoi.hoten = "";
+        return cudanmoi;
     }
     cudanmoi.lachuho = (lachuho == 1);
     return cudanmoi;
@@ -56,8 +92,11 @@ CuDan NhapCuDan(){
 void NhapDanhSachCuDan(CuDanPtr &danhsach, int soluong){
     int dadhem = 0;
     while(dadhem < soluong){
-        cout << "Nhap cu dan thu " << dadhem + 1 << endl;
+        cout << "\t(?) Nhap cu dan thu " << dadhem + 1 << endl;
         CuDan cudanmoi = NhapCuDan();
+        if(cudanmoi.hoten.empty()){
+            break;
+        }
         bool dacochuho = false;
         CuDanPtr p = danhsach;
         while(p != NULL){
@@ -68,14 +107,19 @@ void NhapDanhSachCuDan(CuDanPtr &danhsach, int soluong){
             p = p->link;
         }
         if(cudanmoi.lachuho && dacochuho){
-            cout << "(!) Can ho da co chu ho" << endl;
-            int themthanhvien = NhapSo("(?) Ban co muon them nguoi nay lam thanh vien khong? (1 = Co, 0 = Khong): ");
-            while(themthanhvien != 0 && themthanhvien != 1){
-                cout << "(!) Chi chon 1 hoac 0" << endl;
-                themthanhvien = NhapSo("(?) Ban co muon them lam thanh vien khong? (1 = Co, 0 = Khong): ");
+            cout << "\t(!) Can ho da co chu ho" << endl;
+            int themthanhvien = NhapSo("\t(?) Ban co muon them nguoi nay lam thanh vien khong? (1 = Co, 0 = Khong): ");
+            int solansai = 0;
+            while(themthanhvien != 0 && themthanhvien != 1 && themthanhvien != -1 && solansai < 2){
+                cout << "\t(!) Chi chon 1 hoac 0" << endl;
+                themthanhvien = NhapSo("\t(?) Ban co muon them lam thanh vien khong? (1 = Co, 0 = Khong): ");
+                solansai++;
+            }
+            if(themthanhvien != 0 && themthanhvien != 1){
+                break;
             }
             if(themthanhvien == 0){
-                cout << "(-) Khong them cu dan" << endl;
+                cout << "\t(-) Khong them cu dan" << endl;
                 break;
             }
             cudanmoi.lachuho = false;
@@ -103,11 +147,17 @@ void XuatDanhSachCuDan(CuDanPtr& danhsach){
         cout << "(Chua co cu dan)" << endl;
         return;
     }
+    bool dainthanhvien = false;
     CuDanPtr p = danhsach;
     while(p != NULL){
         if(p->lachuho){
             cout << "[Chu ho]: ";
-        } 
+        } else {
+            if(!dainthanhvien){
+                cout << "[Thanh vien]" << endl;
+            }
+            dainthanhvien = true;
+        }
         cout << p->hoten << " | "
              << p->cccd << " | "
              << p->sodienthoai << " | "
