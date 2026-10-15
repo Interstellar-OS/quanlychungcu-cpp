@@ -1,3 +1,5 @@
+// Các menu và banner 
+
 #ifndef MENUVAHAMXULY_H
 #define MENUVAHAMXULY_H
 
@@ -8,6 +10,7 @@
 
 void Banner();
 void MenuChinh();
+void BannerDoAnTinHoc();
 void BannerTamBiet();
 
 void XuLyMenu1(CanHoPtr& danhsachcanho);
