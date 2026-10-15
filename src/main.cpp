@@ -1,67 +1,94 @@
-#include "thuvien/canho.h"
-#include "thuvien/cudan.h"
-#include "thuvien/menuvahamxuly.h"
+#include "lib/canho.h"
+#include "lib/cudan.h"
+#include "lib/hamphu.h"
+#include "lib/menuvahamxuly.h"
+#include "lib/saoluuvanapdulieu.h"
 
 int main(){
     CanHoPtr danhsachcanho;
     KhoiTaoDanhSachCanHo(danhsachcanho);
-    KhoiTaoDuLieuMau(danhsachcanho);
+    if(!exists("data")){
+        KhoiTaoDuLieuMau(danhsachcanho);
+        // Gia lap cac can dang thue da o 1 nam va tao hoa don 12 thang gan nhat.
+        KhoiTaoDanhSachHoaDonChoPhongDangThue(danhsachcanho);
+        if(!LuuDuLieu(danhsachcanho)){
+            cout << "(!) Khong the tao du lieu trong thu muc data" << endl;
+            GiaiPhongDanhSachCanHo(danhsachcanho);
+            return 1;
+        }
+    } else if(!NapDuLieu(danhsachcanho)){
+        cout << "(!) Thu muc data ton tai nhung khong doc duoc du lieu" << endl;
+        return 1;
+    } else if(!LuuDuLieu(danhsachcanho)){
+        cout << "(!) Khong the cap nhat dinh dang du lieu" << endl;
+        GiaiPhongDanhSachCanHo(danhsachcanho);
+        return 1;
+    }
+
+    system("cls");
+    Banner();
+    cout << "Thu muc du lieu: " << THUMUCGOC << endl;
+    cout << "Du lieu duoc tu dong nap moi vong menu va tu dong luu sau moi thao tac" << endl;
+    DungChuongTrinh();
 
     int chon;
     while(true){
+        if(!NapDuLieu(danhsachcanho)){
+            cout << "(!) Khong nap duoc du lieu tu thu muc data" << endl;
+        }
         system("cls");
         MenuChinh();
         chon = NhapSo("Chon: ");
         if(chon == 0) {
-            cout << "Tam biet" << endl;
+            system("cls");
+            BannerTamBiet();
             break;
         }
         else if(chon == 1){
             XoaManHinh();
-            XuLy1(danhsachcanho);
+            XuLyMenu1(danhsachcanho);
         }
         else if(chon == 2){
             XoaManHinh();
-            XuLy2(danhsachcanho);
+            XuLyMenu2(danhsachcanho);
         }
         else if(chon == 3){
             XoaManHinh();
-            XuLy3(danhsachcanho);
+            XuLyMenu3(danhsachcanho);
         }
         else if(chon == 4){
             XoaManHinh();
-            XuLy4(danhsachcanho);
+            XuLyMenu4(danhsachcanho);
         }
         else if(chon == 5){
             XoaManHinh();
-            XuLy5(danhsachcanho);
+            XuLyMenu5(danhsachcanho);
         }
         else if(chon == 6){
             XoaManHinh();
-            XuLy6(danhsachcanho);
+            XuLyMenu6(danhsachcanho);
         }
         else if(chon == 7){
             XoaManHinh();
-            XuLy7(danhsachcanho);
+            XuLyMenu7(danhsachcanho);
         }
         else if(chon == 8){
             XoaManHinh();
-            XuLy8();
+            XuLyMenu8(danhsachcanho);
         }
         else if(chon == 9){
             XoaManHinh();
-            XuLy9();
+            XuLyMenu9(danhsachcanho);
         }
         else if(chon == 10){
             XoaManHinh();
-            XuLy10();
-        }
-        else if(chon == 11){
-            XoaManHinh();
-            XuLy11();
+            XuLyMenu10(danhsachcanho);
         }
         else{
             cout << "(!) Lua chon khong hop le !" << endl;
+        }
+        if(chon != 0 && !LuuDuLieu(danhsachcanho)){
+            cout << "(!) Tu dong luu du lieu that bai" << endl;
         }
         DungChuongTrinh();
     }

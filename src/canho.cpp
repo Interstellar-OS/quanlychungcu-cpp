@@ -1,5 +1,6 @@
-#include "thuvien/canho.h"
-#include "thuvien/cudan.h"
+#include "lib/canho.h"
+#include "lib/cudan.h"
+#include "lib/hamphu.h"
 
 bool KiemTraRongDanhSachCanHo(CanHoPtr &danhsach){
     return danhsach == NULL;
@@ -15,18 +16,27 @@ CanHoPtr KhoiTaoCanHo(CanHo &canhomoi){
     p->tang = canhomoi.tang;
     p->trangthai = canhomoi.trangthai;
     p->danhsachcudan = NULL;
+    p->danhsachhoadon = NULL;
     p->link = NULL;
     return p;
 }
 
 CanHo NhapCanHo(){
     CanHo canhomoi;
-    cout << "(?) Nhap ten can ho: ";
-    getline(cin, canhomoi.tencanho);
-    cout << "(?) Nhap tang: ";
-    cin >> canhomoi.tang;
+    canhomoi.tencanho = NhapChuoi("(?) Nhap ten can ho: ");
+    while(canhomoi.tencanho.find_first_of("/\\:*?\"<>|") != string::npos
+          || canhomoi.tencanho == "." || canhomoi.tencanho == ".."){
+        cout << "(!) Ten can ho khong duoc chua ky tu / \\ : * ? \" < > |" << endl;
+        canhomoi.tencanho = NhapChuoi("(?) Nhap lai ten can ho: ");
+    }
+    canhomoi.tang = NhapSo("(?) Nhap tang: ");
+    while(canhomoi.tang < 1){
+        cout << "(!) Tang phai lon hon 0" << endl;
+        canhomoi.tang = NhapSo("(?) Nhap tang: ");
+    }
     canhomoi.trangthai = "Trong";
     canhomoi.danhsachcudan = NULL;
+    canhomoi.danhsachhoadon = NULL;
     canhomoi.link = NULL;
     return canhomoi;
 }
@@ -69,6 +79,7 @@ bool XoaCanHo(CanHoPtr &danhsach, string tencanho){
                 truoc->link = p->link;
             }
             GiaiPhongDanhSachCuDan(p->danhsachcudan); // xoa cu dan truoc
+            GiaiPhongDanhSachHoaDon(p->danhsachhoadon);
             delete p;
             return true;
         }
@@ -83,11 +94,24 @@ bool SuaCanHo(CanHoPtr &danhsach, string tencanho){
     if(p == NULL){
         return false;
     }
-    cout << "(?) Nhap ten can ho moi: ";
-    getline(cin, p->tencanho);
-    cout << "(?) Nhap tang moi: ";
-    cin >> p->tang;
-    cin.ignore(1000, '\n');
+    string tencanhotam = NhapChuoi("(?) Nhap ten can ho moi: ");
+    if(tencanhotam.find_first_of("/\\:*?\"<>|") != string::npos
+       || tencanhotam == "." || tencanhotam == ".."){
+        cout << "(!) Ten can ho khong hop le" << endl;
+        return false;
+    }
+    CanHoPtr canhotrungten = TimTheoTenCanHo(danhsach, tencanhotam);
+    if(canhotrungten != NULL && canhotrungten != p){
+        cout << "(!) Ten can ho da ton tai" << endl;
+        return false;
+    }
+    int tangtam = NhapSo("(?) Nhap tang moi: ");
+    while(tangtam < 1){
+        cout << "(!) Tang phai lon hon 0" << endl;
+        tangtam = NhapSo("(?) Nhap tang moi: ");
+    }
+    p->tencanho = tencanhotam;
+    p->tang = tangtam;
     return true;
 }
 
@@ -96,27 +120,47 @@ void ThemCuDanVaoCanHo(CanHoPtr canho, int soluong){
         cout << "(!) Khong tim thay can ho !" << endl;
         return;
     }
+    if(soluong <= 0){
+        cout << "(!) So luong cu dan phai lon hon 0" << endl;
+        return;
+    }
     NhapDanhSachCuDan(canho->danhsachcudan, soluong);
     if(canho->danhsachcudan != NULL){
         canho->trangthai = "Dang thue";
     }
 }
 
-bool ChuyenCuDan(CanHoPtr &danhsach, string tencancu, string cccd, string tencanmoi){
+static CuDanPtr LayChuHo(CuDanPtr danhsach);
+
+bool ChuyenCuDan(CanHoPtr &danhsach, string tencancu, string tencanmoi){
     CanHoPtr cancu = TimTheoTenCanHo(danhsach, tencancu);
     CanHoPtr canmoi = TimTheoTenCanHo(danhsach, tencanmoi);
-    if(cancu == NULL || canmoi == NULL){
+    if(cancu == NULL || canmoi == NULL || cancu == canmoi){
         return false;
     }
-    CuDanPtr cudan = TachCuDan(cancu->danhsachcudan, cccd);
-    if(cudan == NULL){
-        return false;
-    }
-    ThemCuoiDanhSachCuDan(canmoi->danhsachcudan, cudan);
-    canmoi->trangthai = "Dang thue";
     if(cancu->danhsachcudan == NULL){
-        cancu->trangthai = "Trong";
+        cout << "(!) Can ho nguon chua co cu dan" << endl;
+        return false;
     }
+
+    CuDanPtr chuhonguon = LayChuHo(cancu->danhsachcudan);
+    CuDanPtr chuhodich = LayChuHo(canmoi->danhsachcudan);
+    if(chuhonguon != NULL && chuhodich != NULL){
+        chuhonguon->lachuho = false;
+    }
+
+    if(canmoi->danhsachcudan == NULL){
+        canmoi->danhsachcudan = cancu->danhsachcudan;
+    } else {
+        CuDanPtr cuoids = canmoi->danhsachcudan;
+        while(cuoids->link != NULL){
+            cuoids = cuoids->link;
+        }
+        cuoids->link = cancu->danhsachcudan;
+    }
+    cancu->danhsachcudan = NULL;
+    canmoi->trangthai = "Dang thue";
+    cancu->trangthai = "Trong";
     return true;
 }
 
@@ -196,6 +240,7 @@ void SapXepTenCanHoXuoi(CanHoPtr &danhsach){
                 swap(i->tang, j->tang);
                 swap(i->trangthai, j->trangthai);
                 swap(i->danhsachcudan, j->danhsachcudan);
+                swap(i->danhsachhoadon, j->danhsachhoadon);
             }
             j = j->link;
         }
@@ -213,6 +258,7 @@ void SapXepTenCanHoNguoc(CanHoPtr &danhsach){
                 swap(i->tang, j->tang);
                 swap(i->trangthai, j->trangthai);
                 swap(i->danhsachcudan, j->danhsachcudan);
+                swap(i->danhsachhoadon, j->danhsachhoadon);
             }
             j = j->link;
         }
@@ -255,7 +301,8 @@ void XuatChiTietMotCanHo(CanHoPtr canho, bool kemchuho){
     if(kemchuho){
         CuDanPtr chuho = LayChuHo(canho->danhsachcudan);
         if(chuho != NULL){
-            cout << "[Chu ho]: " << chuho->hoten << " | " << chuho->cccd << " | " << chuho->sodienthoai << endl;
+            cout << "[Chu ho]" << endl;
+            cout << "\t" << chuho->hoten << " | " << chuho->cccd << " | " << chuho->sodienthoai << endl;
             bool cothanhvien = false;
             CuDanPtr p = canho->danhsachcudan;
             while(p != NULL){
@@ -296,6 +343,7 @@ void GiaiPhongDanhSachCanHo(CanHoPtr &danhsach){
         CanHoPtr danhsachtam = danhsach;
         danhsach = danhsach->link;
         GiaiPhongDanhSachCuDan(danhsachtam->danhsachcudan);
+        GiaiPhongDanhSachHoaDon(danhsachtam->danhsachhoadon);
         delete danhsachtam;
     }
 }

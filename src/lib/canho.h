@@ -3,6 +3,7 @@
 #ifndef CANHO_H
 #define CANHO_H
 
+#include "hoadon.h"
 #include "thuvienchung.h"
 #include "cudan.h"
 
@@ -11,6 +12,7 @@ struct CanHo {
     int tang;
     string trangthai;           // trạng thái phòng trống hay ko 
     CuDanPtr danhsachcudan;     // thành viên trong phòng đó 
+    HoaDonPtr danhsachhoadon;   // hóa đơn của căn hộ đó 
     CanHo* link;
 };
 
@@ -30,7 +32,7 @@ bool SuaCanHo(CanHoPtr& danhsach, string tencanho);
 void ThemCuDanVaoCanHo(CanHoPtr canho, int soluong);
 
 // Chuyển cư dân sang căn hộ khác 
-bool ChuyenCuDan(CanHoPtr& danhsach, string tencanhocu, string tencanhomoi, string cccd);
+bool ChuyenCuDan(CanHoPtr& danhsach, string tencanhocu, string tencanhomoi);
 
 // Tìm kiếm 
 CanHoPtr TimTheoTenChuHo(CanHoPtr& danhsach, string tenchuho);

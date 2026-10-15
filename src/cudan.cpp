@@ -1,4 +1,17 @@
-#include "thuvien/cudan.h"
+#include "lib/cudan.h"
+#include "lib/hamphu.h"
+
+static bool Lachuoichicoso(string chuoi){
+    if(chuoi.empty()){
+        return false;
+    }
+    for(char kitu : chuoi){
+        if(kitu < '0' || kitu > '9'){
+            return false;
+        }
+    }
+    return true;
+}
 
 bool KiemTraRongDanhSachCuDan(CuDanPtr &danhsach){
     return danhsach == NULL;
@@ -20,29 +33,56 @@ CuDanPtr KhoiTaoCuDan(CuDan &cudanmoi){
 
 CuDan NhapCuDan(){
     CuDan cudanmoi;
-    cout << "(?) Nhap ho ten: ";
-    getline(cin, cudanmoi.hoten);
-    cout << "(?) Nhap CCCD: "; 
-    getline(cin, cudanmoi.cccd);
-    cout << "(?) Nhap so dien thoai: "; 
-    getline(cin, cudanmoi.sodienthoai);
-    char lachuho;
-    cout << "(?) La chu ho (y/n): "; 
-    cin >> lachuho;
-    if(lachuho == 'y') {
-        cudanmoi.lachuho = true;
-    } else {
-        cudanmoi.lachuho = false;
+    cudanmoi.hoten = NhapChuoi("(?) Nhap ho ten: ");
+    cudanmoi.cccd = NhapChuoi("(?) Nhap CCCD: ");
+    while(!Lachuoichicoso(cudanmoi.cccd)){
+        cout << "(!) CCCD chi duoc chua chu so" << endl;
+        cudanmoi.cccd = NhapChuoi("(?) Nhap lai CCCD: ");
     }
+    cudanmoi.sodienthoai = NhapChuoi("(?) Nhap so dien thoai: ");
+    while(!Lachuoichicoso(cudanmoi.sodienthoai)){
+        cout << "(!) So dien thoai chi duoc chua chu so" << endl;
+        cudanmoi.sodienthoai = NhapChuoi("(?) Nhap lai so dien thoai: ");
+    }
+    int lachuho = NhapSo("(?) La chu ho? (1 = Co, 0 = Khong): ");
+    while(lachuho != 0 && lachuho != 1){
+        cout << "(!) Chi chon 1 hoac 0" << endl;
+        lachuho = NhapSo("(?) La chu ho? (1 = Co, 0 = Khong): ");
+    }
+    cudanmoi.lachuho = (lachuho == 1);
     return cudanmoi;
 }
 
 void NhapDanhSachCuDan(CuDanPtr &danhsach, int soluong){
-    for(int i = 0; i < soluong; i++){
-        cout << "Nhap cu dan thu " << i + 1 << endl;
+    int dadhem = 0;
+    while(dadhem < soluong){
+        cout << "Nhap cu dan thu " << dadhem + 1 << endl;
         CuDan cudanmoi = NhapCuDan();
+        bool dacochuho = false;
+        CuDanPtr p = danhsach;
+        while(p != NULL){
+            if(p->lachuho){
+                dacochuho = true;
+                break;
+            }
+            p = p->link;
+        }
+        if(cudanmoi.lachuho && dacochuho){
+            cout << "(!) Can ho da co chu ho" << endl;
+            int themthanhvien = NhapSo("(?) Ban co muon them nguoi nay lam thanh vien khong? (1 = Co, 0 = Khong): ");
+            while(themthanhvien != 0 && themthanhvien != 1){
+                cout << "(!) Chi chon 1 hoac 0" << endl;
+                themthanhvien = NhapSo("(?) Ban co muon them lam thanh vien khong? (1 = Co, 0 = Khong): ");
+            }
+            if(themthanhvien == 0){
+                cout << "(-) Khong them cu dan" << endl;
+                break;
+            }
+            cudanmoi.lachuho = false;
+        }
         CuDanPtr khoitaocudanmoi = KhoiTaoCuDan(cudanmoi);
         ThemCuoiDanhSachCuDan(danhsach, khoitaocudanmoi);
+        dadhem++;
     }
 }
 
@@ -64,7 +104,7 @@ void XuatDanhSachCuDan(CuDanPtr& danhsach){
         return;
     }
     CuDanPtr p = danhsach;
-    while(p->link != NULL){
+    while(p != NULL){
         if(p->lachuho){
             cout << "[Chu ho]: ";
         } 
@@ -78,11 +118,10 @@ void XuatDanhSachCuDan(CuDanPtr& danhsach){
 
 CuDanPtr TimTheoCCCD(CuDanPtr &danhsach, string cccd){
     if(KiemTraRongDanhSachCuDan(danhsach)){
-        cout << "(Chua co cu dan)" << endl;
         return NULL;
     }
     CuDanPtr p = danhsach;
-    while(p->link != NULL){
+    while(p != NULL){
         if(p->cccd == cccd){
             return p;
         }
@@ -92,17 +131,14 @@ CuDanPtr TimTheoCCCD(CuDanPtr &danhsach, string cccd){
 }
 
 CuDanPtr TimTheoChuHo(CuDanPtr& danhsach, string tenchuho){
-    if(!KiemTraRongDanhSachCuDan(danhsach)){
+    if(KiemTraRongDanhSachCuDan(danhsach)){
         cout << "(Chua co cu dan)" << endl;
         return NULL;
     }
     CuDanPtr p = danhsach;
-    while(p->link != NULL){
+    while(p != NULL){
         if(p->hoten == tenchuho && p->lachuho){
             return p;
-        } else {
-            cout << "(!) Nguoi nay khong phai chu ho !" << endl;
-            return NULL;
         }
         p = p->link;
     }
@@ -116,7 +152,7 @@ CuDanPtr TachCuDan(CuDanPtr& danhsach, string cccd){
     }
     CuDanPtr truoc = NULL;
     CuDanPtr p = danhsach;
-    while(p->link != NULL){
+    while(p != NULL){
         if(p->cccd == cccd){
             if(truoc == NULL){
                 danhsach = p->link;

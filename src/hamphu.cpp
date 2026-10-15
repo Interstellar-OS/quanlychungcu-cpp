@@ -1,16 +1,47 @@
-#include "thuvien/hamphu.h"
+#include "lib/hamphu.h"
 
 int NhapSo(string loinhac){
-    cout << loinhac;
-    int so; cin >> so;
-    cin.ignore(1000, '\n');
-    return so;
+    while(true){
+        cout << loinhac;
+        string chuoi;
+        getline(cin, chuoi);
+        int so = ChuyenThanhSo(chuoi);
+        bool chuoiso0 = !chuoi.empty();
+        size_t batdau = 0;
+        if(!chuoi.empty() && (chuoi[0] == '+' || chuoi[0] == '-')){
+            batdau = 1;
+        }
+        if(batdau == chuoi.size()){
+            chuoiso0 = false;
+        }
+        for(size_t i = batdau; i < chuoi.size(); i++){
+            if(chuoi[i] < '0' || chuoi[i] > '9'){
+                chuoiso0 = false;
+                break;
+            }
+            if(chuoi[i] != '0'){
+                chuoiso0 = false;
+            }
+        }
+        if(so != 0 || chuoiso0){
+            return so;
+        }
+        cout << "(!) Vui long nhap so nguyen hop le" << endl;
+    }
 }
 
 string NhapChuoi(string loinhac){
-    cout << loinhac;
-    string s; getline(cin, s);
-    return s;
+    while(true){
+        cout << loinhac;
+        string s;
+        getline(cin, s);
+        size_t batdau = s.find_first_not_of(" \t\r\n");
+        size_t ketthuc = s.find_last_not_of(" \t\r\n");
+        if(batdau != string::npos){
+            return s.substr(batdau, ketthuc - batdau + 1);
+        }
+        cout << "(!) Khong duoc de trong" << endl;
+    }
 }
 
 void DungChuongTrinh(){
@@ -28,6 +59,7 @@ void ThemCanHoMau(CanHoPtr& danhsachcanho, string tencanho, int tang){
     canhomoi.tang = tang;
     canhomoi.trangthai = "Trong";
     canhomoi.danhsachcudan = NULL;
+    canhomoi.danhsachhoadon = NULL;
     canhomoi.link = NULL;
     ThemCuoiDanhSachCanHo(danhsachcanho, KhoiTaoCanHo(canhomoi));
 }
@@ -86,4 +118,68 @@ void KhoiTaoDuLieuMau(CanHoPtr& danhsachcanho){
 
     ThemCuDanMau(danhsachcanho, "A405", "Vu Van Son",       "079201000022", "0908000001", true);
     ThemCuDanMau(danhsachcanho, "A405", "Mai Thi Tuyet",    "079201000023", "0908000002", false);
+}
+
+void KhoiTaoDanhSachHoaDonChoPhongDangThue(CanHoPtr& danhsachcanho){
+    CanHoPtr p = danhsachcanho;
+    while(p != NULL){
+        if(p->trangthai == "Dang thue"){
+            KhoiTaoDanhSachHoaDonNgauNhien(p->danhsachhoadon);
+        }
+        p = p->link;
+    }
+}
+
+string LayThoiGianHienTai(){
+    auto hientai = system_clock::now();
+    time_t t = chrono::system_clock::to_time_t(hientai);
+    tm* tg = localtime(&t);
+    ostringstream thoigianhientai;
+    thoigianhientai << put_time(tg, "%H:%M:%S %d/%m/%Y");
+    return thoigianhientai.str();
+}
+
+int RandomSo(int a, int b){
+    random_device rd;
+    mt19937 gen(rd());
+    uniform_int_distribution<int> dist(a, b);
+    return dist(gen);
+}
+
+int LayThangHienTai() {
+    auto hientai = system_clock::to_time_t(system_clock::now());
+    return localtime(&hientai)->tm_mon + 1;
+}
+
+int LayNamHienTai() {
+    auto hientai = system_clock::to_time_t(system_clock::now());
+    return localtime(&hientai)->tm_year + 1900;
+}
+
+int ChuyenThanhSo(string chuoi){
+    try {
+        size_t pos;
+        int n = stoi(chuoi, &pos);
+        if(pos != chuoi.size() || chuoi.empty()){
+            return 0;
+        }
+        for(size_t i = 0; i < chuoi.size(); i++){
+            if(i == 0 && (chuoi[i] == '-' || chuoi[i] == '+')){
+                if(chuoi.size() == 1){
+                    return 0;
+                }
+                continue;
+            }
+            if(chuoi[i] < '0' || chuoi[i] > '9'){
+                return 0;
+            }
+        }
+        return n;
+    } catch(...){
+        return 0;
+    }
+}
+
+void XoaBoDem(){
+    cin.ignore(1000, '\n');
 }
