@@ -28,7 +28,6 @@ void MenuChinh(){
     cout << "[08] Xem hoa don hang thang" << endl;
     cout << "[09] Thu phi (danh dau da dong)" << endl;
     cout << "[10] Thong ke" << endl;
-    cout << "[11] Thong tin luu du lieu tu dong" << endl;
     cout << "[00] Thoat chuong trinh" << endl;
 }
 
