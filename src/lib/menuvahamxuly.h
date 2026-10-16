@@ -12,6 +12,7 @@ void Banner();
 void MenuChinh();
 void BannerDoAnTinHoc();
 void BannerTamBiet();
+void MoTaNghiepVu();
 
 void XuLyMenu1(CanHoPtr& danhsachcanho);
 void XuLyMenu2(CanHoPtr& danhsachcanho);

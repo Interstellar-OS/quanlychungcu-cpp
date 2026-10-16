@@ -28,38 +28,8 @@ CanHo NhapCanHo(){
         canhomoi.tang = -1;
         return canhomoi;
     }
-    int solansai = 0;
-    while((canhomoi.tencanho.find_first_of("/\\:*?\"<>|") != string::npos
-          || canhomoi.tencanho == "." || canhomoi.tencanho == "..") && solansai < 2){
-        cout << "\t(!) Ten can ho khong duoc chua ky tu / \\ : * ? \" < > |" << endl;
-        canhomoi.tencanho = NhapChuoi("\t(?) Nhap lai ten can ho: ");
-        if(canhomoi.tencanho.empty()){
-            canhomoi.tang = -1;
-            return canhomoi;
-        }
-        solansai++;
-    }
-    if(canhomoi.tencanho.find_first_of("/\\:*?\"<>|") != string::npos
-       || canhomoi.tencanho == "." || canhomoi.tencanho == ".."){
-        cout << "(!) Da nhap sai 3 lan, quay lai menu" << endl;
-        canhomoi.tencanho = "";
-        canhomoi.tang = -1;
-        return canhomoi;
-    }
     canhomoi.tang = NhapSo("\t(?) Nhap tang: ");
     if(canhomoi.tang == -1){
-        return canhomoi;
-    }
-    solansai = 0;
-    while(canhomoi.tang < 1 && solansai < 2){
-        cout << "\t(!) Tang phai lon hon 0" << endl;
-        canhomoi.tang = NhapSo("\t(?) Nhap tang: ");
-        if(canhomoi.tang == -1){
-            return canhomoi;
-        }
-        solansai++;
-    }
-    if(canhomoi.tang < 1){
         canhomoi.tencanho = "";
         return canhomoi;
     }
@@ -123,35 +93,23 @@ bool SuaCanHo(CanHoPtr &danhsach, string tencanho){
     if(p == NULL){
         return false;
     }
-    string tencanhotam = NhapChuoi("\t(?) Nhap ten can ho moi: ");
-    if(tencanhotam.empty()){
-        return false;
-    }
-    if(tencanhotam.find_first_of("/\\:*?\"<>|") != string::npos
-       || tencanhotam == "." || tencanhotam == ".."){
-        cout << "\t(!) Ten can ho khong hop le" << endl;
-        return false;
+    string tencanhotam = p->tencanho;
+    string chuoi;
+    cout << "\t(?) Nhap ten can ho moi (Enter de giu nguyen): ";
+    getline(cin, chuoi);
+    if(!chuoi.empty()){
+        tencanhotam = chuoi;
     }
     CanHoPtr canhotrungten = TimTheoTenCanHo(danhsach, tencanhotam);
     if(canhotrungten != NULL && canhotrungten != p){
         cout << "\t(!) Ten can ho da ton tai" << endl;
         return false;
     }
-    int tangtam = NhapSo("\t(?) Nhap tang moi: ");
-    if(tangtam == -1){
-        return false;
-    }
-    int solansai = 0;
-    while(tangtam < 1 && solansai < 2){
-        cout << "\t(!) Tang phai lon hon 0" << endl;
-        tangtam = NhapSo("\t(?) Nhap tang moi: ");
-        if(tangtam == -1){
-            return false;
-        }
-        solansai++;
-    }
-    if(tangtam < 1){
-        cout << "(!) Da nhap sai 3 lan, quay lai menu" << endl;
+    int tangtam = p->tang;
+    cout << "\t(?) Nhap tang moi (Enter de giu nguyen): ";
+    getline(cin, chuoi);
+    if(!chuoi.empty() && !ChuyenThanhSo(chuoi, tangtam)){
+        cout << "\t(!) Tang phai la so nguyen" << endl;
         return false;
     }
     p->tencanho = tencanhotam;
@@ -413,6 +371,13 @@ void XuatChiTietDanhSachCanHo(CanHoPtr& danhsach, bool kemchuho){
         p = p->link;
     }
     cout << endl;
+}
+
+CuDanPtr TraVeDanhSachCuDan(CanHoPtr& danhsach){
+    if(KiemTraRongDanhSachCanHo(danhsach)){
+        return NULL;
+    }
+    return danhsach->danhsachcudan;
 }
 
 void GiaiPhongDanhSachCanHo(CanHoPtr &danhsach){

@@ -14,9 +14,9 @@ void ThongKeCanHo(CanHoPtr& danhsachcanho){
         tongsocan++;
         p = p->link;
     }
-    cout << "\t\t- Tong so can: " << tongsocan << endl;
-    cout << "\t\t- So can trong: " << socantrong << endl;
-    cout << "\t\t- So can dang thue: " << socandangthue << endl;
+    cout << "\t- Tong so can: " << tongsocan << endl;
+    cout << "\t- So can trong: " << socantrong << endl;
+    cout << "\t- So can dang thue: " << socandangthue << endl;
 }
 
 void ThongKeCuDan(CanHoPtr& danhsachcanho){
@@ -33,9 +33,9 @@ void ThongKeCuDan(CanHoPtr& danhsachcanho){
         }
         p = p->link;
     }
-    cout << "\t\t- Tong so cu dan: " << tongsocudan << endl;
+    cout << "\t- Tong so cu dan: " << tongsocudan << endl;
     for(auto scdtt : socudantungtang){
-        cout << "\t\t- Tang " << scdtt.first
+        cout << "\t    - Tang " << scdtt.first
              << ": " << scdtt.second << " cu dan" << endl;
     }
 }
@@ -56,16 +56,16 @@ void ThongKeDoanhThu(CanHoPtr& danhsachcanho){
         p = p->link;
     }
     cout << fixed << setprecision(0);
-    cout << "\t\t- Tong tien hoa don: " << tongtienhoadon << " (VND)" << endl;
-    cout << "\t\t- Tong doanh thu da thu: " << tongtiendathu << " (VND)" << endl;
-    cout << "\t\t- Tong doanh thu con no: " << tongtienhoadon - tongtiendathu << " (VND)" << endl;
+    cout << "\t- Tong tien hoa don: " << tongtienhoadon << " (VND)" << endl;
+    cout << "\t- Tong doanh thu da thu: " << tongtiendathu << " (VND)" << endl;
+    cout << "\t- Tong doanh thu con no: " << tongtienhoadon - tongtiendathu << " (VND)" << endl;
 }
 
 void ThongKeTatCaThongTin(CanHoPtr& danhsachcanho){
-    cout << "\t[Thong ke can ho]" << endl;
+    cout << "[Thong ke can ho]" << endl;
     ThongKeCanHo(danhsachcanho);
-    cout << "\t[Thong ke cu dan]" << endl;
+    cout << "[Thong ke cu dan]" << endl;
     ThongKeCuDan(danhsachcanho);
-    cout << "\t[Thong ke doanh thu]" << endl;
+    cout << "[Thong ke doanh thu]" << endl;
     ThongKeDoanhThu(danhsachcanho);
 }
