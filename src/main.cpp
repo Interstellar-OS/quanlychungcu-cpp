@@ -1,8 +1,4 @@
-#include "lib/canho.h"
-#include "lib/cudan.h"
-#include "lib/hamphu.h"
-#include "lib/menuvahamxuly.h"
-#include "lib/saoluuvanapdulieu.h"
+#include "lib/includetatca.h"
 
 // MAIN
 int main() {
@@ -12,12 +8,10 @@ int main() {
         return -1;
     }
 
+    // in banner và mô tả nghiệp vụ trước khi vào chương trình chính 
     system("cls");
     BannerDoAnTinHoc();
-    cout << "\n\n" << endl;
-    cout << " - Thu muc du lieu: " << THUMUCGOC << endl;
-    cout << " - Du lieu duoc tu dong nap moi vong menu va tu dong luu sau moi thao tac";
-    cout << endl;
+    MoTaNghiepVu();
     DungChuongTrinh();
 
     int chon;

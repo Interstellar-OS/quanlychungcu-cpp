@@ -1,18 +1,6 @@
 #include "lib/cudan.h"
 #include "lib/hamphu.h"
 
-static bool Lachuoichicoso(string chuoi){
-    if(chuoi.empty()){
-        return false;
-    }
-    for(char kitu : chuoi){
-        if(kitu < '0' || kitu > '9'){
-            return false;
-        }
-    }
-    return true;
-}
-
 bool KiemTraRongDanhSachCuDan(CuDanPtr &danhsach){
     return danhsach == NULL;
 }
@@ -41,40 +29,12 @@ CuDan NhapCuDan(){
     if(cudanmoi.cccd.empty()){
         return cudanmoi;
     }
-    int solansai = 0;
-    while(!Lachuoichicoso(cudanmoi.cccd) && solansai < 2){
-        cout << "\t\t(!) CCCD chi duoc chua chu so" << endl;
-        cudanmoi.cccd = NhapChuoi("(?) Nhap lai CCCD: ");
-        if(cudanmoi.cccd.empty()){
-            return cudanmoi;
-        }
-        solansai++;
-    }
-    if(!Lachuoichicoso(cudanmoi.cccd)){
-        cout << "\t(!) Da nhap sai 3 lan, quay lai menu" << endl;
-        cudanmoi.hoten = "";
-        return cudanmoi;
-    }
     cudanmoi.sodienthoai = NhapChuoi("\t\t(?) Nhap so dien thoai: ");
     if(cudanmoi.sodienthoai.empty()){
         return cudanmoi;
     }
-    solansai = 0;
-    while(!Lachuoichicoso(cudanmoi.sodienthoai) && solansai < 2){
-        cout << "\t\t(!) So dien thoai chi duoc chua chu so" << endl;
-        cudanmoi.sodienthoai = NhapChuoi("(?) Nhap lai so dien thoai: ");
-        if(cudanmoi.sodienthoai.empty()){
-            return cudanmoi;
-        }
-        solansai++;
-    }
-    if(!Lachuoichicoso(cudanmoi.sodienthoai)){
-        cout << "\t(!) Da nhap sai 3 lan, quay lai menu" << endl;
-        cudanmoi.hoten = "";
-        return cudanmoi;
-    }
     int lachuho = NhapSo("\t\t(?) La chu ho? (1 = Co, 0 = Khong): ");
-    solansai = 0;
+    int solansai = 0;
     while(lachuho != 0 && lachuho != 1 && lachuho != -1 && solansai < 2){
         cout << "\t\t(!) Chi chon 1 hoac 0" << endl;
         lachuho = NhapSo("\t\t(?) La chu ho? (1 = Co, 0 = Khong): ");

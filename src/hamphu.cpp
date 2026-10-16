@@ -21,10 +21,8 @@ string NhapChuoi(string loinhac, int solanthu){
         cout << loinhac;
         string s;
         getline(cin, s);
-        size_t batdau = s.find_first_not_of(" \t\r\n");
-        size_t ketthuc = s.find_last_not_of(" \t\r\n");
-        if(batdau != string::npos){
-            return s.substr(batdau, ketthuc - batdau + 1);
+        if(!s.empty()){
+            return s;
         }
         cout << "\t(!) Khong duoc de trong ("
              << lanthu << "/" << solanthu << ")" << endl;

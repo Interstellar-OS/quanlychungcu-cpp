@@ -1,35 +1,10 @@
 #include "lib/menuvahamxuly.h"
 #include "lib/canho.h"
+#include "lib/cudan.h"
 #include "lib/hoadon.h"
 #include "lib/saoluuvanapdulieu.h"
 #include "lib/thongke.h"
 
-void Banner(){
-    string banner = R"(┌──────────────────────────────┐
-│      DO AN TIN HOC HK1       │
-│ GVHD: Nguyen Truong An       │
-│ SVTH: Tran Minh Gia Bao      │
-│ Đe Tai: Quan Ly Chung Cu C++ │
-└──────────────────────────────┘
-)";
-    cout << banner << endl;
-}
-
-void MenuChinh(){
-    Banner();
-    cout << "MENU QUAN LY CHUNG CU " << "\n\n";
-    cout << "[01] Quan ly can ho (them / xoa / sua)" << endl;
-    cout << "[02] Hien thi danh sach can ho" << endl;
-    cout << "[03] Them cu dan moi vao can ho (them theo so luong)" << endl;
-    cout << "[04] Chuyen cu dan di" << endl;
-    cout << "[05] Tim kiem can ho theo cu dan" << endl;
-    cout << "[06] Loc can ho" << endl;
-    cout << "[07] Sap xep can ho" << endl;
-    cout << "[08] Xem hoa don hang thang" << endl;
-    cout << "[09] Thu phi (danh dau da dong)" << endl;
-    cout << "[10] Thong ke" << endl;
-    cout << "[00] Thoat chuong trinh" << endl;
-}
 void BannerDoAnTinHoc(){
     string banner = R"(
   _____   ____             _   _   _______ _____ _   _   _    _  ____   _____ 
@@ -41,7 +16,7 @@ void BannerDoAnTinHoc(){
 
                                         - GVHD: NGUYEN TRUONG AN
                                         - SVTH: TRAN MINH GIA BAO
-                                        - DE TAI : QUAN LY CHUNG CU DANH SACH LIEN KET C++ 
+                                        - DE TAI: QUAN LY CHUNG CU DANH SACH LIEN KET C++ 
 )";
     cout << banner << endl;
 }
@@ -57,9 +32,57 @@ void BannerTamBiet(){
 
                                         - GVHD: NGUYEN TRUONG AN
                                         - TAC GIA: TRAN MINH GIA BAO
-                                        - DE TAI : QUAN LY CHUNG CU DANH SACH LIEN KET C++ 
+                                        - DE TAI: QUAN LY CHUNG CU DANH SACH LIEN KET C++ 
 )";
     cout << banner << endl;
+}
+
+void MoTaNghiepVu(){
+    string nghiepvu = R"(
+MO TA NGHIEP VU
+[01] Chuong trinh dung de quan ly can ho, cu dan va hoa don trong chung cu
+[02] Lan dau chay chuong trinh se tao du lieu mau va luu vao thu muc data
+[03] Nhung lan sau chuong trinh se nap du lieu tu file truoc khi vao menu
+[04] Moi can ho co ten, tang, trang thai, danh sach cu dan va danh sach hoa don
+[05] Nguoi dung co the them, xoa, sua ten hoac tang can ho va khong duoc dat trung ten can ho
+[06] Nguoi dung co the xem danh sach can ho, xem chu ho hoac xem thong tin chi tiet
+[07] Nguoi dung co the them cu dan vao can ho, neu da co chu ho thi hoi co muon them nguoi moi lam thanh vien khong
+[08] Nguoi dung co the chuyen toan bo cu dan sang can ho khac va chon cach xu ly khi can ho do da co cu dan
+[09] Nguoi dung co the tim can ho theo ten can ho, ten chu ho hoac CCCD chu ho
+[10] Nguoi dung co the loc can ho theo tang hoac trang thai va sap xep theo ten
+[11] Hoa don can ho gom tien quan ly, tien dien, tien nuoc, tien gui xe va trang thai thanh toan
+[12] Nguoi dung co the xem hoa don va tao hoa don thang hien tai cho can ho co cu dan
+[13] Nguoi dung co the danh dau hoa don da thanh toan va xem hoa don da dong hoac chua dong
+[14] Chuong trinh co chuc nang thong ke can ho, cu dan theo tang va doanh thu da thu hoac con no
+    )";
+    cout << nghiepvu << endl;
+}
+
+void Banner(){
+    string banner = R"(┌──────────────────────────────┐
+│      DO AN TIN HOC HK1       │
+│ GVHD: Nguyen Truong An       │
+│ SVTH: Tran Minh Gia Bao      │
+│ Đe Tai: Quan Ly Chung Cu C++ │
+└──────────────────────────────┘
+)";
+    cout << banner << endl;
+}
+
+void MenuChinh(){
+    Banner();
+    cout << "MENU QUAN LY CHUNG CU " << "\n\n";
+    cout << "[01] Quan ly can ho" << endl;
+    cout << "[02] Hien thi danh sach can ho" << endl;
+    cout << "[03] Them cu dan moi vao can ho" << endl;
+    cout << "[04] Chuyen cu dan di" << endl;
+    cout << "[05] Tim kiem can ho theo cu dan" << endl;
+    cout << "[06] Loc can ho" << endl;
+    cout << "[07] Sap xep can ho" << endl;
+    cout << "[08] Xem hoa don hang thang" << endl;
+    cout << "[09] Thu phi" << endl;
+    cout << "[10] Thong ke" << endl;
+    cout << "[00] Thoat chuong trinh" << endl;
 }
 
 void XuLyMenu1(CanHoPtr& danhsachcanho){
@@ -70,7 +93,7 @@ void XuLyMenu1(CanHoPtr& danhsachcanho){
     int luachon = NhapSo("(?) Chon: ", 1);
     if(luachon == 1){
         CanHo canhomoi = NhapCanHo();
-        if(canhomoi.tencanho.empty() || canhomoi.tang < 1){
+        if(canhomoi.tencanho.empty()){
             return;
         }
         if(TimTheoTenCanHo(danhsachcanho, canhomoi.tencanho) != NULL){
@@ -277,7 +300,12 @@ void XuLyMenu8(CanHoPtr& danhsachcanho){
         int thanghientai = LayThangHienTai();
         int namhientai = LayNamHienTai();
         HoaDonPtr hoadonhientai = TimHoaDon(canho->danhsachhoadon, thanghientai, namhientai);
-        if(hoadonhientai == NULL){
+        CuDanPtr cudanhientai = TraVeDanhSachCuDan(canho);
+        if(hoadonhientai == NULL && cudanhientai == NULL){
+            cout << "\t(!) Khong the tao hoa don vi can ho khong co cu dan "<< endl;
+            return;
+        }
+        if(hoadonhientai == NULL && cudanhientai != NULL){
             cout << "\tTao hoa don thang " << thanghientai
                  << " nam " << namhientai << " cho phong " << canho->tencanho << endl;
             cout << "\t[01] Tao hoa don" << endl;
@@ -296,7 +324,7 @@ void XuLyMenu8(CanHoPtr& danhsachcanho){
                 cout << "\t(*) Da tao hoa don thang " << thanghientai
                      << " nam " << namhientai << " cho phong " << canho->tencanho << endl;
                 XuatDanhSachHoaDon(canho->danhsachhoadon);
-            } else if(luachontaohoadon == 0){
+            } else if(luachontaohoadon == 2){
                 cout << "\t(*) Khong tao hoa don" << endl;
             } else {
                 cout << "\t(!) Lua chon khong hop le, quay lai menu" << endl;
