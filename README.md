@@ -156,6 +156,6 @@ Khi chạy chương trình lần đầu (chưa có dữ liệu)
 ## Tác giả 
 
 **Trần Minh Gia Bảo**<br>
-**Nguyễn Trường Chinh (đóng góp)**
-**GitHub:** [https://github.com/baoxipo](https://github.com/baoxipo)
-**GitHub:** [https://github.com/Interstellar-OS](https://github.com/Interstellar-OS)
+**Nguyễn Trường Chinh (đóng góp)**<br>
+**GitHub:** [https://github.com/baoxipo](https://github.com/baoxipo)<br>
+**GitHub:** [https://github.com/Interstellar-OS](https://github.com/Interstellar-OS)<br>
